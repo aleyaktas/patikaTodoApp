@@ -6,6 +6,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 10,
+    flex: 1,
   },
   containerPressed: {
     backgroundColor: '#36474F',

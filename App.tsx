@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Button,
+  FlatList,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -9,12 +10,18 @@ import {
 } from 'react-native';
 import Todo from './src/components/Todo/Todo';
 
+export interface TodoProps {
+  text: string;
+  isPressed: boolean;
+  onClick?: () => void;
+}
+
 function App(): JSX.Element {
-  const [todos, setTodos] = React.useState<string[]>([]);
-  const [text, setText] = React.useState('');
+  const [todos, setTodos] = useState<Array<TodoProps>>([]);
+  const [text, setText] = useState<string>('');
 
   const handlePress = () => {
-    setTodos([...todos, text]);
+    setTodos([...todos, {text, isPressed: false}]);
     setText('');
   };
   const handleChange = (e: any) => {
@@ -26,9 +33,30 @@ function App(): JSX.Element {
         <Text style={styles.title}>Yapılacaklar</Text>
         <Text style={styles.count}>{todos.length}</Text>
       </View>
-      {todos.map(todo => (
-        <Todo todo={todo} />
-      ))}
+      <FlatList
+        data={todos}
+        renderItem={({item, index}) => (
+          <Todo
+            text={item.text}
+            isPressed={item.isPressed}
+            onClick={() =>
+              setTodos(
+                todos.map((todo, i) => {
+                  if (i === index) {
+                    return {
+                      ...todo,
+                      isPressed: !todo.isPressed,
+                    };
+                  }
+                  return todo;
+                }),
+              )
+            }
+          />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+      />
       <View style={styles.cardContainer}>
         <TextInput
           placeholderTextColor="#63696C"

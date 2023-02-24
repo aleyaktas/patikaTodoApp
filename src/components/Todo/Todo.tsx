@@ -1,18 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {TodoProps} from '../../../App';
 import styles from './Todo.styles';
 
-const Todo = ({todo}: {todo: string}) => {
-  const [pressed, setPressed] = React.useState(false);
-  const handlePress = () => {
-    console.log('pressed');
-    setPressed(!pressed);
-  };
+const Todo = ({text, isPressed, onClick}: TodoProps) => {
   return (
     <TouchableOpacity
-      onPress={handlePress}
-      style={[styles.container, pressed && styles.containerPressed]}>
-      <Text style={[styles.text, pressed && styles.textPressed]}>{todo}</Text>
+      onPress={onClick}
+      style={[styles.container, isPressed && styles.containerPressed]}>
+      <Text style={[styles.text, isPressed && styles.textPressed]}>{text}</Text>
     </TouchableOpacity>
   );
 };
